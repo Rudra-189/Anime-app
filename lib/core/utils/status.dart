@@ -1,0 +1,1 @@
+enum stateus {init,loading,success,failure}
