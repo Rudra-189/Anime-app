@@ -21,7 +21,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(homeStatus: status.loading));
     try{
       final List<Anime> data =await repository.getAnimeData();
-      emit(state.copyWith(homeStatus: status.success,data: data));
+      final originalData = data.where((e)=> e.source == "Original").toList();
+      final mangaData = data.where((e)=> e.source == "Manga").toList();
+
+      emit(state.copyWith(homeStatus: status.success,data: data,originalData: originalData,mangaData: mangaData));
     }catch(e){
       emit(state.copyWith(homeStatus: status.failure,errorMessage: e.toString()));
     }

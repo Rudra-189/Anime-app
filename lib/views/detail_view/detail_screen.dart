@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:project2/core/utils/status.dart';
 import 'package:project2/viewmodel/detail_bloc/detail_bloc.dart';
 import 'package:project2/viewmodel/detail_bloc/detail_event.dart';
@@ -27,15 +28,42 @@ class DetailScreen extends StatelessWidget {
               slivers: [
                 // Top Image
                 SliverAppBar(
-                  expandedHeight: 300,
+                  expandedHeight: 525.h,
                   pinned: true,
+                  leading: IconButton(onPressed: (){
+                    Navigator.of(context).pop();
+                  }, icon: Icon(Icons.arrow_back_ios,color: Colors.orange,size: 20.sp,)),
                   flexibleSpace: FlexibleSpaceBar(
-                    background: Image.asset(
-                      'assets/images/sao_banner.jpg', // Replace with your asset
-                      fit: BoxFit.cover,
+                    background: Stack(
+                      children: [
+                        Container(
+                          height: 580.h,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(data!.images.jpg.largeImageUrl.toString()),
+                              fit: BoxFit.cover
+                            )
+                          ),
+                        ),
+                        Container(
+                          height: 575.h,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              end: Alignment.bottomCenter,
+                              begin: Alignment.topCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.transparent,
+                                Colors.transparent,
+                                Colors.black.withOpacity(0.75),
+                                Colors.black.withOpacity(0.85),
+                                Colors.black
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    title: Text('Sword Art Online'),
-                    titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
                   ),
                 ),
 

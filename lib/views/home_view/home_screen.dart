@@ -45,20 +45,17 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 10.h,),
-                        _buildTextAndSeeMore("Most Popular"),
-                        SizedBox(height: 10.h,),
-                        _buildListView(data),
-                        SizedBox(height: 20.h,),
-                        _buildTextAndSeeMore("Popular Near You"),
-                        _buildGridView(data)
-                      ],
-                    ),
-                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10.h,),
+                      _buildTextAndSeeMore("Most Popular"),
+                      SizedBox(height: 10.h,),
+                      _buildListView(state.mangaData),
+                      SizedBox(height: 20.h,),
+                      _buildTextAndSeeMore("Popular Near You"),
+                      _buildGridView(state.originalData)
+                    ],
+                  )
                 )
               ],
             );
@@ -204,7 +201,7 @@ Widget _buildListView(List<Anime> listData){
         child: Container(
           height: 250.h,
           width: 150.w,
-          margin: EdgeInsets.only(right: 10),
+          margin: EdgeInsets.only(left: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start ,
             children: [
@@ -314,11 +311,14 @@ Widget _buildGridView(List<Anime> gridData){
 }
 
 Widget _buildTextAndSeeMore(String title){
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp,fontWeight: FontWeight.w500),),
-      Text("See more",style: TextStyle(color: Colors.orange,fontSize: 14.sp),),
-    ],
+  return Padding(
+    padding:EdgeInsets.symmetric(horizontal: 10.w),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp,fontWeight: FontWeight.w500),),
+        Text("See more",style: TextStyle(color: Colors.orange,fontSize: 14.sp),),
+      ],
+    ),
   );
 }
