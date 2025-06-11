@@ -10,8 +10,8 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     on<splashLoading>(_splashLoading);
   }
   Future<void>_splashLoading(splashLoading event,Emitter emit)async{
-    emit(state.copyWith(splashStatus: stateus.loading));
+    emit(state.copyWith(splashStatus: status.loading));
     await Future.delayed(Duration(seconds: 5));
-    emit(state.copyWith(splashStatus: stateus.success));
+    emit(state.copyWith(splashStatus: status.success));
   }
 }

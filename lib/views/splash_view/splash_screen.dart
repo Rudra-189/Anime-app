@@ -14,7 +14,7 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<SplashBloc,SplashState>(
         listener: (context,state){
-          if(state.splashStatus == stateus.success){
+          if(state.splashStatus == status.success){
             Navigator.of(context).pushNamed(AppConstants.homeRoute);
           }
         },

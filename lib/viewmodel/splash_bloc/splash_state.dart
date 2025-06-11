@@ -3,12 +3,12 @@ import 'package:equatable/equatable.dart';
 import 'package:project2/core/utils/status.dart';
 
 class SplashState extends Equatable{
-  final stateus splashStatus;
+  final status splashStatus;
   final String errorMessage;
 
-  SplashState({this.splashStatus = stateus.init, this.errorMessage = ''});
+  SplashState({this.splashStatus = status.init, this.errorMessage = ''});
 
-  SplashState copyWith({stateus? splashStatus,String? errorMessage}){
+  SplashState copyWith({status? splashStatus,String? errorMessage}){
     return SplashState(
       splashStatus: splashStatus ?? this.splashStatus,
       errorMessage: errorMessage ?? this.errorMessage

@@ -18,12 +18,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
   Future<void>_loadHomePageData(loadHomePageData event,Emitter emit)async{
     print("////////////////////////////");
-    emit(state.copyWith(homeStatus: stateus.loading));
+    emit(state.copyWith(homeStatus: status.loading));
     try{
       final List<Anime> data =await repository.getAnimeData();
-      emit(state.copyWith(homeStatus: stateus.success,data: data));
+      emit(state.copyWith(homeStatus: status.success,data: data));
     }catch(e){
-      emit(state.copyWith(homeStatus: stateus.failure,errorMessage: e.toString()));
+      emit(state.copyWith(homeStatus: status.failure,errorMessage: e.toString()));
     }
   }
 }
