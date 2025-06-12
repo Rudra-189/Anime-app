@@ -47,13 +47,16 @@ class SearchScreen extends StatelessWidget {
               ),
             ),
             body: BlocBuilder<SearchBloc,SearchState>(builder: (context,state){
-              if(state.searchController!.text.isNotEmpty){
-                final data = state.data;
-                return Column(children: [_buildGridView(data)]);
-              }else{
-                final data = state.dataFiltered;
-                return Column(children: [_buildGridView(data)]);
-              }
+                if(state.searchStatus == status.loading){
+                  return Center(child: CircularProgressIndicator(),);
+                }else if(state.searchStatus == status.success){
+                  final data = state.data;
+                  return Column(children: [_buildGridView(data)]);
+                }else if(state.searchStatus == status.failure){
+                  return Center(child: Text(state.errorMessage),);
+                }else{
+                  return SizedBox.shrink();
+                }
             }),
           );
         }else if(state.searchStatus == status.failure){

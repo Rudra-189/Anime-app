@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:project2/core/constants/app_constants.dart';
 import 'package:project2/core/utils/status.dart';
 import 'package:project2/viewmodel/detail_bloc/detail_bloc.dart';
 import 'package:project2/viewmodel/detail_bloc/detail_event.dart';
@@ -15,15 +16,11 @@ class DetailScreen extends StatelessWidget {
 
 
   DetailScreen({super.key, required this.id});
-
-  late final WebViewController _controller;
-
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<DetailBloc>().add(loadAnimeDetail(id));
     });
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: BlocBuilder<DetailBloc, DetailState>(
@@ -34,9 +31,6 @@ class DetailScreen extends StatelessWidget {
             );
           } else if (state.detailPageStatus == status.success) {
             final data = state.data;
-            _controller = WebViewController()
-              ..setJavaScriptMode(JavaScriptMode.unrestricted)
-              ..loadRequest(Uri.parse(data!.trailer!.url ?? ''));
             return Stack(
               children: [
                 SizedBox(
@@ -228,7 +222,7 @@ class DetailScreen extends StatelessWidget {
                               Text("Youtube Link : ",style: TextStyle(color: Colors.orange,fontSize: 14.sp),),
                               GestureDetector(
                                 onTap: (){
-                                  launchUrl(Uri.parse(data.trailer!.url.toString()),mode: LaunchMode.externalApplication);
+                                  Navigator.of(context).pushNamed(AppConstants.wabViewRoute,arguments: data.trailer!.url);
                                 },
                                 child: Text(" - "+data.trailer!.url.toString(),style: TextStyle(color: Colors.blueAccent,fontSize: 12.sp,overflow: TextOverflow.ellipsis),),
                               ),

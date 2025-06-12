@@ -6,19 +6,18 @@ import '../../model/animeDataModel.dart';
 
 class SearchState extends Equatable{
   final List<Anime> data;
-  final List<Anime> dataFiltered;
   final status searchStatus;
   final String errorMessage;
   final TextEditingController? searchController;
 
-  SearchState({this.data = const [],this.dataFiltered = const [], this.searchStatus = status.init,this.errorMessage = '',this.searchController});
+  SearchState({this.data = const [], this.searchStatus = status.init,this.errorMessage = '',this.searchController});
 
-  SearchState copyWith({List<Anime>? data,List<Anime>? dataFiltered, status? searchStatus,String? errorMessage,TextEditingController? searchController}) {
+  SearchState copyWith({List<Anime>? data, status? searchStatus,String? errorMessage,TextEditingController? searchController}) {
     return SearchState(
-        data: data ?? this.data,dataFiltered: dataFiltered ?? this.dataFiltered,searchStatus: searchStatus ?? this.searchStatus,errorMessage: errorMessage ?? this.errorMessage,searchController: TextEditingController());
+        data: data ?? this.data, searchStatus: searchStatus ?? this.searchStatus,errorMessage: errorMessage ?? this.errorMessage,searchController: TextEditingController());
   }
 
   @override
-  List<Object?> get props => [data,dataFiltered,searchStatus,errorMessage,searchController];
+  List<Object?> get props => [data,searchStatus,errorMessage,searchController];
 }
 

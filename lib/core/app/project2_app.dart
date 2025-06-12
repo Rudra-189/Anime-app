@@ -12,9 +12,6 @@ import 'package:project2/viewmodel/language_bloc/language_state.dart';
 import 'package:project2/viewmodel/search_bloc/search_bloc.dart';
 import 'package:project2/viewmodel/splash_bloc/splash_bloc.dart';
 import 'package:project2/viewmodel/splash_bloc/splash_event.dart';
-import 'package:project2/viewmodel/wabview_bloc/wab_view_bloc.dart';
-import 'package:project2/viewmodel/wabview_bloc/wab_view_event.dart';
-import 'package:project2/views/home_view/home_screen.dart';
 import 'package:project2/views/splash_view/splash_screen.dart';
 
 import '../../viewmodel/hoem_bloc/home_bloc.dart';
@@ -34,7 +31,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => HomeBloc()..add(loadHomePageData())),
         BlocProvider(create: (_) => SplashBloc()..add(splashLoading())),
         BlocProvider(create: (_) => SearchBloc()..add(LoadSearchData())),
-        BlocProvider(create: (_) => WabViewBloc()),
         BlocProvider(create: (_) => DetailBloc()),
       ],
       child: BlocBuilder<LanguageBloc, LanguageState>(

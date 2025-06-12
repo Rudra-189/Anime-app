@@ -30,7 +30,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   void _OnSearchTextChange(OnSearchTextChange event,Emitter emit){
     final query = event.query.toLowerCase();
-    final filtered = state.data.where((e)=>e.title.toLowerCase().contains(query)).toList();
-    emit(state.copyWith(dataFiltered: filtered));
+    final filtered = query.isEmpty ? state.data :state.data.where((e)=>e.title.toLowerCase().contains(query)).toList();
+    emit(state.copyWith(data: filtered));
   }
 }

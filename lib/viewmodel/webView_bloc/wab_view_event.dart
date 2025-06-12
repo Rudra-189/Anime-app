@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-abstract class WabViewEvent extends Equatable{
+abstract class WebViewEvent extends Equatable{
   @override
   List<Object>get props => [];
 }
 
-class LoadWabView extends WabViewEvent{
+class LoadWebView extends WebViewEvent{
   final String url;
 
-  LoadWabView(this.url);
+  LoadWebView(this.url);
 
   @override
   List<Object>get props => [url];

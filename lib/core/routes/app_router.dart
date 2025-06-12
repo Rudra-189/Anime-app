@@ -6,6 +6,7 @@ import 'package:project2/views/detail_view/detail_screen.dart';
 import 'package:project2/views/home_view/home_screen.dart';
 import 'package:project2/views/search_view/search_screen.dart';
 import 'package:project2/views/splash_view/splash_screen.dart';
+import 'package:project2/views/wabview_view/wabview_screen.dart';
 
 import '../constants/app_constants.dart';
 
@@ -21,6 +22,9 @@ class AppRouter{
         return MaterialPageRoute(builder: (_) => DetailScreen(id: id));
       case AppConstants.searchRoute:
         return MaterialPageRoute(builder: (_) => SearchScreen());
+      case AppConstants.wabViewRoute:
+        String url = settings.arguments as String;
+        return MaterialPageRoute(builder: (_) => WebViewScreen(url: url));
       default:
         return MaterialPageRoute(builder: (_) => Scaffold(body: Center(child: Text('No route defined for ${settings.name}'),),));
     }
