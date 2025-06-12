@@ -15,15 +15,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   SearchBloc() : super(SearchState()) {
     on<LoadSearchData>(_LoadSearchData);
+    on<OnSearchTextChange>(_OnSearchTextChange);
   }
   Future<void>_LoadSearchData(LoadSearchData event,Emitter emit)async{
     print("////////////////////////////");
     emit(state.copyWith(searchStatus: status.loading));
     try{
-      final List<Anime> data =await repository.getAnimeData();
+      final List<Anime> data = await repository.getAnimeData();
       emit(state.copyWith(searchStatus: status.success,data: data));
     }catch(e){
       emit(state.copyWith(searchStatus: status.failure,errorMessage: e.toString()));
     }
+  }
+
+  void _OnSearchTextChange(OnSearchTextChange event,Emitter emit){
+    final query = event.query.toLowerCase();
+    final filtered = state.data.where((e)=>e.title.toLowerCase().contains(query)).toList();
+    emit(state.copyWith(dataFiltered: filtered));
   }
 }

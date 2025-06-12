@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,171 +7,309 @@ import 'package:project2/core/utils/status.dart';
 import 'package:project2/viewmodel/detail_bloc/detail_bloc.dart';
 import 'package:project2/viewmodel/detail_bloc/detail_event.dart';
 import 'package:project2/viewmodel/detail_bloc/detail_state.dart';
-import 'package:readmore/readmore.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class DetailScreen extends StatelessWidget {
   final int id;
 
-  DetailScreen({super.key,required this.id});
+
+  DetailScreen({super.key, required this.id});
+
+  late final WebViewController _controller;
 
   @override
   Widget build(BuildContext context) {
-    print(id);
-    context.read<DetailBloc>().add(loadAnimeDetail(id));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<DetailBloc>().add(loadAnimeDetail(id));
+    });
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       body: BlocBuilder<DetailBloc, DetailState>(
         builder: (context, state) {
-          if(state.detailPageStatus == status.loading){
-            return Center(child: CircularProgressIndicator(),);
-          }else if(state.detailPageStatus == status.success){
+          if (state.detailPageStatus == status.loading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state.detailPageStatus == status.success) {
             final data = state.data;
-            return CustomScrollView(
-              slivers: [
-                // Top Image
-                SliverAppBar(
-                  expandedHeight: 525.h,
-                  pinned: true,
-                  leading: IconButton(onPressed: (){
-                    Navigator.of(context).pop();
-                  }, icon: Icon(Icons.arrow_back_ios,color: Colors.orange,size: 20.sp,)),
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Stack(
-                      children: [
-                        Container(
-                          height: 580.h,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(data!.images.jpg.largeImageUrl.toString()),
-                              fit: BoxFit.cover
-                            )
-                          ),
-                        ),
-                        Container(
-                          height: 575.h,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              end: Alignment.bottomCenter,
-                              begin: Alignment.topCenter,
-                              colors: [
-                                Colors.transparent,
-                                Colors.transparent,
-                                Colors.transparent,
-                                Colors.black.withOpacity(0.75),
-                                Colors.black.withOpacity(0.85),
-                                Colors.black
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+            _controller = WebViewController()
+              ..setJavaScriptMode(JavaScriptMode.unrestricted)
+              ..loadRequest(Uri.parse(data!.trailer!.url ?? ''));
+            return Stack(
+              children: [
+                SizedBox(
+                  height: 600.sh,
+                  width: double.infinity,
+                  child: Image.network(
+                    data!.images.jpg.largeImageUrl.toString(),
+                    fit: BoxFit.cover,
                   ),
                 ),
-
-                // Body content
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Tags and Rating
-                        Text(
-                          'Dub | Sub • Action, Adventure, Fantasy, Isekai, Sci-Fi',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: const [
-                            Icon(Icons.star, color: Colors.orange),
-                            SizedBox(width: 4),
-                            Text('4.7 (95.2K)'),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 0.55.sh), // Start content mid-image
+                      Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.25),
+                              Colors.black.withOpacity(0.75),
+                              Colors.black.withOpacity(0.95),
+                              Colors.black.withOpacity(0.98),
+                              Colors.black
+                            ])),
+                        alignment:
+                            Alignment.bottomCenter, // Transparent background
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Column(
-                              children: const [
-                                Icon(Icons.add, color: Colors.orange),
-                                Text('My List'),
-                              ],
-                            ),
-                            Column(
-                              children: const [
-                                Icon(Icons.share, color: Colors.orange),
-                                Text('Share'),
-                              ],
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Description
-                        const Text(
-                          'In the near future, a Virtual Reality Massive Multiplayer Online Role-Playing Game (VRMMORPG)...',
-                          style: TextStyle(fontSize: 14),
-                        ),
-
-                        const SizedBox(height: 20),
-                        const Divider(),
-
-                        // Tabs
-                        DefaultTabController(
-                          length: 3,
-                          child: Column(
-                            children: const [
-                              TabBar(
-                                labelColor: Colors.orange,
-                                unselectedLabelColor: Colors.grey,
-                                tabs: [
-                                  Tab(text: 'EPISODES'),
-                                  Tab(text: 'FEATURED MUSIC'),
-                                  Tab(text: 'MORE LIKE THIS'),
+                            Text(
+                              data.title,
+                              style: TextStyle(
+                                fontSize: 26.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 2,
+                                shadows: [
+                                  Shadow(
+                                      blurRadius: 4,
+                                      color: Colors.white,
+                                      offset: Offset(1, 1))
                                 ],
                               ),
+                            ),
+                            SizedBox(height: 6.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.1)),
+                                  child: Text(
+                                    data.type.toString(),
+                                    style: TextStyle(
+                                        color: Colors.orange, fontSize: 10.sp),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5.w, vertical: 1.h),
+                                ),
+                                SizedBox(width: 6.w),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.1)),
+                                  child: Text(
+                                    data.source.toString(),
+                                    style: TextStyle(
+                                        color: Colors.orange, fontSize: 10.sp),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5.w, vertical: 1.h),
+                                ),
+                                SizedBox(width: 6.w),
+                                Text(
+                                  "Dub | Sub  " + data.status.toString(),
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.85),
+                                      fontSize: 12.sp),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 6.h),
+                            Text(
+                              "Duration : " + data.duration.toString(),
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.75),
+                                  fontSize: 12),
+                            )
+                            // For scroll testing
+                          ],
+                        ),
+                      ),
+                      Transform.translate(
+                        offset: Offset(0, -1.h),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  colors: [Colors.black, Colors.black])),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 30.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Icon(Icons.add,size: 20.sp,color: Colors.orange,),
+                                      Text("MY LIST",style:TextStyle(color: Colors.orange,fontSize: 10.sp,),)
+                                    ],
+                                  ),
+                                  SizedBox(width: 30.w,),
+                                  Column(
+                                    children: [
+                                      Icon(Icons.share_outlined,size: 20.sp,color: Colors.orange,),
+                                      Text("SHARE",style:TextStyle(color: Colors.orange,fontSize: 10.sp,),)
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 30 .h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 5.h),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0.1)
+                                        ),
+                                        child: Text(data.rank.toString(),style: TextStyle(color: Colors.white,fontSize: 10.sp),),
+                                      ),
+                                      Text("RANK",style: TextStyle(color: Colors.white,fontSize: 12.sp,letterSpacing: 1),)
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 5.h),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0.1)
+                                        ),
+                                        child: Text(data.popularity.toString(),style: TextStyle(color: Colors.white,fontSize: 10.sp),),
+                                      ),
+                                      Text("POPULARITY",style: TextStyle(color: Colors.white,fontSize: 12,letterSpacing: 1),)
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 5.h),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0.1)
+                                        ),
+                                        child: Text(data.members.toString(),style: TextStyle(color: Colors.white,fontSize: 10.sp),),
+                                      ),
+                                      Text("MEMBERS",style: TextStyle(color: Colors.white,fontSize: 14.sp,letterSpacing: 1),)
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 5.h),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0.1)
+                                        ),
+                                        child: Text(data.favorites.toString(),style: TextStyle(color: Colors.white,fontSize: 10.sp),),
+                                      ),
+                                      Text("FAVORITES",style: TextStyle(color: Colors.white,fontSize: 14.sp,letterSpacing: 1),)
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 30 .h),
+                              Text("Show" +data.type.toString()+ "info : ",style: TextStyle(color: Colors.white,fontSize: 15.sp,letterSpacing: 1,fontWeight: FontWeight.w600),),
+                              SizedBox(height: 10 .h),
+                              Text("Rank : "+data.rank.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                              Text("Type : "+data.type.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                              Text("Source : "+data.score.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                              Text("status : "+data.status.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
+                              SizedBox(height: 10.h),
+                              Text("Youtube Link : ",style: TextStyle(color: Colors.orange,fontSize: 14.sp),),
+                              GestureDetector(
+                                onTap: (){
+                                  launchUrl(Uri.parse(data.trailer!.url.toString()),mode: LaunchMode.externalApplication);
+                                },
+                                child: Text(" - "+data.trailer!.url.toString(),style: TextStyle(color: Colors.blueAccent,fontSize: 12.sp,overflow: TextOverflow.ellipsis),),
+                              ),
+                              SizedBox(height: 30.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("SHOW - SYNOPSIS/PLOT : ",style: TextStyle(color: Colors.orange,fontSize: 15.sp,letterSpacing: 1,fontWeight: FontWeight.w600),)
+                                ],
+                              ),
+                              SizedBox(height: 10.h),
+                              Text(
+                                data.synopsis.toString(),
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white.withOpacity(0.75)
+                                ),
+                              ),
+                              SizedBox(height: 30.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 50.h,
+                                    width: 275.w,
+                                    decoration: BoxDecoration(
+                                      color: Colors.orange,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.play_arrow_outlined,size: 25,color: Colors.black,),
+                                        Text("START WATCHING E1",style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.w600,letterSpacing: 1),)
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 20.w,),
+                                  Container(
+                                    height: 50.h,
+                                    width: 50.w,
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        top: BorderSide(color: Colors.orange,width: 2),
+                                        bottom: BorderSide(color: Colors.orange,width: 2),
+                                        left: BorderSide(color: Colors.orange,width: 2),
+                                        right: BorderSide(color: Colors.orange,width: 2),
+                                      )
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Icon(Icons.bookmark_outline,size: 20,color: Colors.orange,),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 30.h),
+                              // For scroll testing
                             ],
                           ),
                         ),
-
-                        const SizedBox(height: 20),
-
-                        // Season & Episodes Section
-                        const Text('S2: Sword Art Online II',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-
-                        const SizedBox(height: 20),
-
-                        // Start Watching Button
-                        Center(
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.play_arrow),
-                            label: const Text('START WATCHING S1 E1'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 40.h,
+                  left: 16.w,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white.withOpacity(0.2),
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.orange,size: 20.sp,),
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ),
                 ),
               ],
             );
-          }else if(state.detailPageStatus == status.failure){
-            return Center(child: Text(state.errorMessage),);
-          }else{
+          } else if (state.detailPageStatus == status.failure) {
+            return Center(
+              child: Text(state.errorMessage),
+            );
+          } else {
             return const SizedBox();
           }
         },

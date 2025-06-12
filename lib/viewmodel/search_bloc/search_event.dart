@@ -6,3 +6,12 @@ abstract class SearchEvent extends Equatable{
 }
 
 class LoadSearchData extends SearchEvent{}
+
+class OnSearchTextChange extends SearchEvent{
+  final String query;
+
+  OnSearchTextChange(this.query);
+
+  @override
+  List<Object> get props => [query];
+}

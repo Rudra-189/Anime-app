@@ -36,9 +36,13 @@ class HomeScreen extends StatelessWidget {
                   backgroundColor: Colors.black,
                   expandedHeight:600.h,
                   actions: [
-                    IconButton(onPressed: (){
-                      Navigator.of(context).pushNamed(AppConstants.searchRoute);
-                    }, icon: Icon(Icons.search,color: Colors.orange,size: 22.sp,))
+                    CircleAvatar(
+                      backgroundColor: Colors.white.withOpacity(0.2),
+                      child: IconButton(onPressed: (){
+                        Navigator.of(context).pushNamed(AppConstants.searchRoute);
+                      }, icon: Icon(Icons.search,color: Colors.orange,size: 22.sp,)),
+                    ),
+                    SizedBox(width: 5.w,)
                   ],
                   flexibleSpace: FlexibleSpaceBar(
                     background: _buildCarouselSlider(context,data),
@@ -48,11 +52,11 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       SizedBox(height: 10.h,),
-                      _buildTextAndSeeMore("Most Popular"),
+                      _buildTextAndSeeMore("Original Popular"),
                       SizedBox(height: 10.h,),
                       _buildListView(state.mangaData),
                       SizedBox(height: 20.h,),
-                      _buildTextAndSeeMore("Popular Near You"),
+                      _buildTextAndSeeMore("Manga You"),
                       _buildGridView(state.originalData)
                     ],
                   )
@@ -248,7 +252,8 @@ Widget _buildGridView(List<Anime> gridData){
       crossAxisCount: 2, // Number of columns
       crossAxisSpacing: 0,
       mainAxisSpacing:0,
-      childAspectRatio: 0.4 / 0.65, // Width / Height
+      childAspectRatio: 0.45 / 0.67, //
+      // Width / Height
     ),
     itemCount: gridData.length,
     shrinkWrap: true,
@@ -263,28 +268,36 @@ Widget _buildGridView(List<Anime> gridData){
               Navigator.of(context).pushNamed(AppConstants.detailRoute,arguments: data.malId);
             },
             child: SizedBox(
-              height: 275.h,
-              width: 150.w,
+              height: 285.h,
+              width: 175.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     height: 225.h,
-                    width: 150.w,
+                    width: 175.w,
                     decoration: BoxDecoration(
-                        image: DecorationImage(
+                      image: DecorationImage(
                             image: NetworkImage(data.images.jpg.largeImageUrl.toString()),
                             fit: BoxFit.cover
                         ),
-                        border: Border(
+                      border: Border(
                             top: BorderSide(color: Colors.orange,width: 2.5.w),
                             bottom: BorderSide(color: Colors.orange,width: 2.5.w),
                             left: BorderSide(color: Colors.orange,width: 2.5.w),
                             right: BorderSide(color: Colors.orange,width: 2.5.w)
+                        ),
+                      borderRadius: BorderRadius.circular(10.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.orange.withOpacity(0.25),
+                          offset: Offset(5, 5),
+                          blurRadius: 5
                         )
+                      ]
                     ),
                   ),
-                  Text(data.title,style: TextStyle(color: Colors.white,fontSize: 14,overflow: TextOverflow.ellipsis),),
+                  Text(data.title,style: TextStyle(color: Colors.white,fontSize: 14,overflow: TextOverflow.ellipsis),maxLines: 2,),
                   Row(
                     children: [
                       Container(
