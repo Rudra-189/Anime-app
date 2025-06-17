@@ -6,7 +6,7 @@ class SplashState extends Equatable{
   final status splashStatus;
   final String errorMessage;
 
-  SplashState({this.splashStatus = status.init, this.errorMessage = ''});
+  const SplashState({this.splashStatus = status.init, this.errorMessage = ''});
 
   SplashState copyWith({status? splashStatus,String? errorMessage}){
     return SplashState(

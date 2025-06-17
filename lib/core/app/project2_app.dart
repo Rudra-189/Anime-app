@@ -1,23 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:project2/core/api_config/client/api_client.dart';
-import 'package:project2/core/constants/app_constants.dart';
-import 'package:project2/core/routes/app_router.dart';
-import 'package:project2/repository/home_repository.dart';
-import 'package:project2/viewmodel/detail_bloc/detail_bloc.dart';
-import 'package:project2/viewmodel/language_bloc/language_bloc.dart';
-import 'package:project2/viewmodel/language_bloc/language_event.dart';
-import 'package:project2/viewmodel/language_bloc/language_state.dart';
-import 'package:project2/viewmodel/search_bloc/search_bloc.dart';
-import 'package:project2/viewmodel/splash_bloc/splash_bloc.dart';
-import 'package:project2/viewmodel/splash_bloc/splash_event.dart';
-import 'package:project2/views/splash_view/splash_screen.dart';
-
-import '../../viewmodel/hoem_bloc/home_bloc.dart';
-import '../../viewmodel/hoem_bloc/home_event.dart';
-import '../../viewmodel/search_bloc/search_event.dart';
-import '../l10n/l10n.dart';
+import 'package:project2/core/themes/theme_helper.dart';
+import 'package:project2/core/utils/exports.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,11 +9,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => LanguageBloc()..add(loadLanguage())),
-        BlocProvider(create: (_) => HomeBloc()..add(loadHomePageData())),
-        BlocProvider(create: (_) => SplashBloc()..add(splashLoading())),
-        BlocProvider(create: (_) => SearchBloc()..add(LoadSearchData())),
+        BlocProvider(create: (_) => LanguageBloc()..add(LoadLanguageEvent())),
+        BlocProvider(create: (_) => SplashBloc()..add(SplashLoadingEvent())),
+        BlocProvider(create: (_) => HomeBloc()),
         BlocProvider(create: (_) => DetailBloc()),
+        BlocProvider(create: (_) => SearchBloc()),
+        // BlocProvider(create: (_) => SearchBloc()..add(LoadSearchData())),
       ],
       child: BlocBuilder<LanguageBloc, LanguageState>(
         builder: (context, state) {
@@ -42,14 +25,12 @@ class MyApp extends StatelessWidget {
             builder: (_,child){
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
-                title: 'Anime World',
-                theme: ThemeData(
-                  colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                  useMaterial3: true,
-                ),
+                title: 'ANIME',
+                theme: MyAppThemeHelper.darkTheme,
+                themeMode: ThemeMode.light,
                 home: SplashScreen(),
-                onGenerateRoute: AppRouter.generateRoute,
-                initialRoute: AppConstants.splashRoute,
+                routes: AppRouter.routes,
+                initialRoute: AppRouter.initialRoute,
                 locale: state.locale,
                 supportedLocales: const [
                   Locale('en'), // English

@@ -8,7 +8,7 @@ class LanguageState extends Equatable{
   final String errorMessage;
   final status languageStatus;
 
-  LanguageState({this.locale,this.errorMessage = '',this.languageStatus = status.init});
+  const LanguageState({this.locale,this.errorMessage = '',this.languageStatus = status.init});
 
   LanguageState copyWith({Locale? locale,String? errorMessage,status? languageStatus}){
     return LanguageState(

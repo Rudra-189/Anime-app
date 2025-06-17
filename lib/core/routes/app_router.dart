@@ -1,32 +1,26 @@
-import 'dart:ffi';
+import 'package:project2/core/utils/exports.dart';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:project2/views/detail_view/detail_screen.dart';
-import 'package:project2/views/home_view/home_screen.dart';
-import 'package:project2/views/search_view/search_screen.dart';
-import 'package:project2/views/splash_view/splash_screen.dart';
-import 'package:project2/views/wabview_view/wabview_screen.dart';
+class AppRouter {
 
-import '../constants/app_constants.dart';
+  static const String initialRoute = '/splash';
+  static const String homeRoute = '/home';
+  static const String detailRoute = '/detail';
+  static const String searchRoute = '/search';
+  static const String wabViewRoute = '/wabView';
 
-class AppRouter{
-  static Route<dynamic>generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case AppConstants.splashRoute:
-        return MaterialPageRoute(builder: (_) => SplashScreen());
-      case AppConstants.homeRoute:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
-      case AppConstants.detailRoute:
-        int id = settings.arguments as int;
-        return MaterialPageRoute(builder: (_) => DetailScreen(id: id));
-      case AppConstants.searchRoute:
-        return MaterialPageRoute(builder: (_) => SearchScreen());
-      case AppConstants.wabViewRoute:
-        String url = settings.arguments as String;
-        return MaterialPageRoute(builder: (_) => WebViewScreen(url: url));
-      default:
-        return MaterialPageRoute(builder: (_) => Scaffold(body: Center(child: Text('No route defined for ${settings.name}'),),));
+  static Map<String, WidgetBuilder> get routes => {
+    initialRoute: (context) => SplashScreen(),
+    homeRoute: (context) => HomeScreen(),
+    detailRoute: (context){
+      final args = ModalRoute.of(context)!.settings.arguments;
+      final id = (args is int) ? args : 0;
+      return DetailScreen(id: id);
+    },
+    searchRoute:(context) => SearchScreen(),
+    wabViewRoute:(context) {
+      final arg = ModalRoute.of(context)!.settings.arguments;
+      final url = (arg is String) ? arg : '';
+      return WebViewScreen(url: url);
     }
-  }
+  };
 }

@@ -5,7 +5,7 @@ class WebViewState extends Equatable{
   final status webViewStatus;
   final String errorMessage;
 
-  WebViewState({this.webViewStatus = status.init,this.errorMessage = ''});
+  const WebViewState({this.webViewStatus = status.init,this.errorMessage = ''});
 
   WebViewState copyWith({status? wabViewStatus,String? errorMessage}){
     return WebViewState(

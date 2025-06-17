@@ -1,0 +1,22 @@
+{
+  "@@locale": "gu",
+  "lbl_app_name": "એનિમે",
+  "lbl_start_watching": "જુવાં શરૂ કરો",
+  "lbl_start_watching_e1": "એપિસોડ 1 જુવાં શરૂ કરો",
+  "lbl_dub_sub": "ડબ | સબ",
+  "lbl_original_for_you": "તમારા માટે ઓરિજિનલ",
+  "lbl_manga_for_you": "તમારા માટે માંગા",
+  "lbl_youtube_link": "યૂટ્યુબ લિંક:",
+  "lbl_show_synopsis_plot": "કથાવસ્તુ/પ્લોટ બતાવો:",
+  "lbl_type": "પ્રકાર",
+  "lbl_source": "સ્ત્રોત",
+  "lbl_status": "સ્થિતિ",
+  "lbl_my_list": "મારી યાદી",
+  "lbl_share": "શેર કરો",
+  "lbl_rank": "ક્રમ",
+  "lbl_popularity": "લોકપ્રિયતા",
+  "lbl_members": "સદસ્યો",
+  "lbl_favorites": "મનપસંદ",
+  "lbl_see_more": "વધુ જુઓ",
+  "lbl_duration": "અવધિ"
+}

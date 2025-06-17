@@ -7,9 +7,9 @@ import '../../core/utils/status.dart';
 
 class WebViewBloc extends Bloc<WebViewEvent, WebViewState> {
   WebViewBloc() : super(WebViewState()) {
-    on<LoadWebView>(_LoadWebView);
+    on<LoadWebViewEvent>(_loadWebViewEvent);
   }
-  Future<void>_LoadWebView(LoadWebView event,Emitter emit)async{
+  Future<void>_loadWebViewEvent(LoadWebViewEvent event,Emitter emit)async{
     emit(state.copyWith(wabViewStatus: status.loading));
     final isValid = Uri.tryParse(event.url)?.isAbsolute ?? false;
     if (isValid) {

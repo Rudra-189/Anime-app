@@ -1,4 +1,3 @@
-// anime_model.dart
 
 class Anime{
   final int malId;
@@ -78,8 +77,8 @@ class Anime{
   });
 
   factory Anime.fromJson(Map<String, dynamic> json) => Anime(
-    malId: json['mal_id'],
-    url: json['url'],
+    malId: json['mal_id'] ?? 0,
+    url: json['url'] ?? 'no url',
     images: Images.fromJson(json['images']),
     trailer: json['trailer'] != null ? Trailer.fromJson(json['trailer']) : null,
     approved: json['approved'],
@@ -99,9 +98,9 @@ class Anime{
     score: (json['score'] as num?)?.toDouble(),
     scoredBy: json['scored_by'],
     rank: json['rank'],
-    popularity: json['popularity'],
-    members: json['members'],
-    favorites: json['favorites'],
+    popularity: json['popularity'] ?? 0,
+    members: json['members'] ?? 0,
+    favorites: json['favorites'] ?? 0,
     synopsis: json['synopsis'],
     background: json['background'],
     season: json['season'],
@@ -141,9 +140,9 @@ class ImageFormat {
   });
 
   factory ImageFormat.fromJson(Map<String, dynamic> json) => ImageFormat(
-    imageUrl: json['image_url'],
-    smallImageUrl: json['small_image_url'],
-    largeImageUrl: json['large_image_url'],
+    imageUrl: json['image_url'] ?? 'no image',
+    smallImageUrl: json['small_image_url']?? 'no image',
+    largeImageUrl: json['large_image_url']?? 'no image',
   );
 }
 
@@ -156,9 +155,9 @@ class Trailer {
   Trailer({this.youtubeId, this.url, this.embedUrl, this.images});
 
   factory Trailer.fromJson(Map<String, dynamic> json) => Trailer(
-    youtubeId: json['youtube_id'],
-    url: json['url'],
-    embedUrl: json['embed_url'],
+    youtubeId: json['youtube_id'] ?? 'no youtubeId',
+    url: json['url'] ?? 'no url',
+    embedUrl: json['embed_url'] ?? 'no embedUrl',
     images: json['images'] != null ? TrailerImages.fromJson(json['images']) : null,
   );
 }
@@ -179,11 +178,11 @@ class TrailerImages {
   });
 
   factory TrailerImages.fromJson(Map<String, dynamic> json) => TrailerImages(
-    imageUrl: json['image_url'],
-    smallImageUrl: json['small_image_url'],
-    mediumImageUrl: json['medium_image_url'],
-    largeImageUrl: json['large_image_url'],
-    maximumImageUrl: json['maximum_image_url'],
+    imageUrl: json['image_url']?? 'no image',
+    smallImageUrl: json['small_image_url']?? 'no image',
+    mediumImageUrl: json['medium_image_url']?? 'no image',
+    largeImageUrl: json['large_image_url']?? 'no image',
+    maximumImageUrl: json['maximum_image_url']?? 'no image',
   );
 }
 
@@ -194,8 +193,8 @@ class Title {
   Title({required this.type, required this.title});
 
   factory Title.fromJson(Map<String, dynamic> json) => Title(
-    type: json['type'],
-    title: json['title'],
+    type: json['type'] ?? 'no type',
+    title: json['title']?? 'no title',
   );
 }
 
@@ -208,10 +207,10 @@ class Aired {
   Aired({this.from, this.to, this.prop, this.string});
 
   factory Aired.fromJson(Map<String, dynamic> json) => Aired(
-    from: json['from'],
-    to: json['to'],
+    from: json['from'] ?? 'no from',
+    to: json['to'] ?? 'no to',
     prop: json['prop'] != null ? Prop.fromJson(json['prop']) : null,
-    string: json['string'],
+    string: json['string'] ?? 'no string',
   );
 }
 
@@ -235,9 +234,9 @@ class DatePart {
   DatePart({this.day, this.month, this.year});
 
   factory DatePart.fromJson(Map<String, dynamic> json) => DatePart(
-    day: json['day'],
-    month: json['month'],
-    year: json['year'],
+    day: json['day'] ?? 0,
+    month: json['month'] ?? 0,
+    year: json['year'] ?? 0,
   );
 }
 
@@ -250,10 +249,10 @@ class Broadcast {
   Broadcast({this.day, this.time, this.timezone, this.string});
 
   factory Broadcast.fromJson(Map<String, dynamic> json) => Broadcast(
-    day: json['day'],
-    time: json['time'],
-    timezone: json['timezone'],
-    string: json['string'],
+    day: json['day'] ?? 'no day',
+    time: json['time'] ?? 'no time',
+    timezone: json['timezone'] ?? 'no timezone',
+    string: json['string'] ?? 'no String',
   );
 }
 
@@ -271,10 +270,10 @@ class Producer {
   });
 
   factory Producer.fromJson(Map<String, dynamic> json) => Producer(
-    malId: json['mal_id'],
-    type: json['type'],
-    name: json['name'],
-    url: json['url'],
+    malId: json['mal_id'] ?? 0,
+    type: json['type'] ?? 'no type',
+    name: json['name'] ?? 'no name',
+    url: json['url'] ?? 'no url',
   );
 }
 
@@ -292,9 +291,9 @@ class Genre {
   });
 
   factory Genre.fromJson(Map<String, dynamic> json) => Genre(
-    malId: json['mal_id'],
-    type: json['type'],
-    name: json['name'],
-    url: json['url'],
+    malId: json['mal_id'] ?? 0,
+    type: json['type'] ?? 'no type',
+    name: json['name'] ?? 'no name',
+    url: json['url'] ?? 'no url',
   );
 }

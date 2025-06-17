@@ -1,0 +1,22 @@
+{
+  "@@locale": "hi",
+  "lbl_app_name": "एनीमे",
+  "lbl_start_watching": "देखना शुरू करें",
+  "lbl_start_watching_e1": "एपिसोड 1 देखना शुरू करें",
+  "lbl_dub_sub": "डब | सब",
+  "lbl_original_for_you": "आपके लिए मूल",
+  "lbl_manga_for_you": "आपके लिए मंगा",
+  "lbl_youtube_link": "यूट्यूब लिंक:",
+  "lbl_show_synopsis_plot": "कहानी/प्लॉट दिखाएं:",
+  "lbl_type": "प्रकार",
+  "lbl_source": "स्रोत",
+  "lbl_status": "स्थिति",
+  "lbl_my_list": "मेरी सूची",
+  "lbl_share": "साझा करें",
+  "lbl_rank": "रैंक",
+  "lbl_popularity": "लोकप्रियता",
+  "lbl_members": "सदस्य",
+  "lbl_favorites": "पसंदीदा",
+  "lbl_see_more": "और देखें",
+  "lbl_duration": "अवधि"
+}

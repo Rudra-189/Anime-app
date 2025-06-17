@@ -1,3 +1,3 @@
 abstract class SplashEvent {}
 
-class splashLoading extends SplashEvent{}
+class SplashLoadingEvent extends SplashEvent{}

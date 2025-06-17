@@ -5,12 +5,12 @@ abstract class LanguageEvent extends Equatable{
   List<Object> get props => [];
 }
 
-class loadLanguage extends LanguageEvent{}
+class LoadLanguageEvent extends LanguageEvent{}
 
-class changeLanguage extends LanguageEvent{
+class ChangeLanguageEvent extends LanguageEvent{
   final String code;
 
-  changeLanguage({required this.code});
+  ChangeLanguageEvent({required this.code});
 
   @override
   List<Object> get props => [code];

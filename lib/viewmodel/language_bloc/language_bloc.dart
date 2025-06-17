@@ -10,10 +10,10 @@ import 'language_state.dart';
 
 class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
   LanguageBloc() : super(LanguageState()) {
-    on<loadLanguage>(_loadLanguage);
-    on<changeLanguage>(_changeLanguage);
+    on<LoadLanguageEvent>(_loadLanguageEvent);
+    on<ChangeLanguageEvent>(_changeLanguageEvent);
   }
-  Future<void>_loadLanguage(loadLanguage event,Emitter emit)async{
+  Future<void>_loadLanguageEvent(LoadLanguageEvent event,Emitter emit)async{
     try{
       emit(state.copyWith(languageStatus: status.loading));
 
@@ -26,7 +26,7 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
     }
 
   }
-  Future<void>_changeLanguage(changeLanguage event,Emitter emit)async{
+  Future<void>_changeLanguageEvent(ChangeLanguageEvent event,Emitter emit)async{
    try{
      emit(state.copyWith(languageStatus: status.loading));
 

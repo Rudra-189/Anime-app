@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:project2/core/constants/app_constants.dart';
-import 'package:project2/core/utils/status.dart';
-import 'package:project2/viewmodel/splash_bloc/splash_bloc.dart';
-import 'package:project2/viewmodel/splash_bloc/splash_state.dart';
+import 'package:project2/core/utils/exports.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -12,10 +6,11 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: BlocConsumer<SplashBloc,SplashState>(
         listener: (context,state){
           if(state.splashStatus == status.success){
-            Navigator.of(context).pushNamed(AppConstants.homeRoute);
+            Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.homeRoute,(Route<dynamic> route) => false,);
           }
         },
         builder: (context,state){
@@ -24,7 +19,6 @@ class SplashScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildSvgLogo(),
-                _buildAppName()
               ],
             ),
           );
@@ -35,9 +29,18 @@ class SplashScreen extends StatelessWidget {
 }
 
 Widget _buildSvgLogo(){
-  return SvgPicture.asset("assets/images/svgs/icons/ic_logo.svg",color: Colors.blueAccent,);
+  return Container(
+    height: 100.h,
+    decoration: BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: Colors.white.withOpacity(0.25),
+          blurRadius: 1000,
+          offset: Offset(4, 4),// horizontal & vertical offset
+        ),
+      ],
+    ),
+    child: CustomImageView(imagePath: 'assets/app_icon.png',fit: BoxFit.cover,)
+  );
 }
 
-Widget _buildAppName(){
-  return Text("Anime World",style: TextStyle(color: Colors.black.withOpacity(0.5),fontSize: 25,fontWeight: FontWeight.bold,letterSpacing: 1),);
-}

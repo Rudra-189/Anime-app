@@ -5,10 +5,10 @@ abstract class DetailEvent extends Equatable{
   List<Object> get props => [];
 }
 
-class loadAnimeDetail extends DetailEvent{
+class LoadAnimeDetailEvent extends DetailEvent{
   final int id;
 
-  loadAnimeDetail(this.id);
+  LoadAnimeDetailEvent(this.id);
 
   @override
   List<Object> get props => [id];

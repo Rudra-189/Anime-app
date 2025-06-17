@@ -7,7 +7,7 @@ class DetailState extends Equatable{
   final status detailPageStatus;
   final String errorMessage;
 
-  DetailState({this.data,this.detailPageStatus = status.init,this.errorMessage = ''});
+  const DetailState({this.data,this.detailPageStatus = status.init,this.errorMessage = ''});
 
   DetailState copyWith({Anime? data,status? detailPageStatus,String? errorMessage}){
     return DetailState(

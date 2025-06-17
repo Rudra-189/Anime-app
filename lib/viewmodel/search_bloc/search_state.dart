@@ -1,23 +1,34 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-
 import '../../core/utils/status.dart';
 import '../../model/animeDataModel.dart';
 
-class SearchState extends Equatable{
+class SearchState extends Equatable {
   final List<Anime> data;
+  final List<Anime> filterData;
   final status searchStatus;
   final String errorMessage;
-  final TextEditingController? searchController;
 
-  SearchState({this.data = const [], this.searchStatus = status.init,this.errorMessage = '',this.searchController});
+  const SearchState(
+      {this.data = const [],
+      this.filterData = const [],
+      this.searchStatus = status.init,
+      this.errorMessage = '',});
 
-  SearchState copyWith({List<Anime>? data, status? searchStatus,String? errorMessage,TextEditingController? searchController}) {
+
+  SearchState copyWith(
+      {List<Anime>? data,
+      List<Anime>? filterData,
+      status? searchStatus,
+      String? errorMessage}) {
     return SearchState(
-        data: data ?? this.data, searchStatus: searchStatus ?? this.searchStatus,errorMessage: errorMessage ?? this.errorMessage,searchController: TextEditingController());
+        data: data ?? this.data,
+        filterData: filterData ?? this.filterData,
+        searchStatus: searchStatus ?? this.searchStatus,
+        errorMessage: errorMessage ?? this.errorMessage
+        );
   }
 
   @override
-  List<Object?> get props => [data,searchStatus,errorMessage,searchController];
+  List<Object?> get props =>
+      [data, filterData, searchStatus, errorMessage];
 }
-

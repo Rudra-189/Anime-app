@@ -3,14 +3,15 @@ import 'package:project2/core/api_config/endpoints/api_endpoint.dart';
 
 import '../model/animeDataModel.dart';
 
-class homeRepository{
+
+class HomeRepository{
   final ApiClient apiClient;
 
-  homeRepository({required this.apiClient});
+  HomeRepository({required this.apiClient});
   
   Future<List<Anime>>getAnimeData()async{
     try{
-      final response = await apiClient.request(RequestType.GET, ApiEndPoint.animeUrl);
+      final response = await apiClient.request(RequestType.GET, ApiEndPoint.animeUrl, );
       final List<dynamic> data = response['data'];
       return data.map((animeJson) => Anime.fromJson(animeJson)).toList();
     }catch(e){
@@ -20,7 +21,7 @@ class homeRepository{
 
   Future<Anime>getAnimeDataById(int id)async{
     try{
-      final response = await apiClient.request(RequestType.GET,'${ApiEndPoint.animeByIdUrl}/$id');
+      final response = await apiClient.request(RequestType.GET,'${ApiEndPoint.animeByIdUrl}/$id',);
       final Anime data = Anime.fromJson(response['data']);
       return data;
     }catch(e){

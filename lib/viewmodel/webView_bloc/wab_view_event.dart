@@ -5,10 +5,10 @@ abstract class WebViewEvent extends Equatable{
   List<Object>get props => [];
 }
 
-class LoadWebView extends WebViewEvent{
+class LoadWebViewEvent extends WebViewEvent{
   final String url;
 
-  LoadWebView(this.url);
+  LoadWebViewEvent(this.url);
 
   @override
   List<Object>get props => [url];

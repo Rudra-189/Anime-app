@@ -21,5 +21,33 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "lbl_app_name": MessageLookupByLibrary.simpleMessage("ANIME"),
+    "lbl_dub_sub": MessageLookupByLibrary.simpleMessage("Dub | Sub"),
+    "lbl_duration": MessageLookupByLibrary.simpleMessage("Duration"),
+    "lbl_favorites": MessageLookupByLibrary.simpleMessage("FAVORITES"),
+    "lbl_manga_for_you": MessageLookupByLibrary.simpleMessage("Manga For You"),
+    "lbl_members": MessageLookupByLibrary.simpleMessage("MEMBERS"),
+    "lbl_my_list": MessageLookupByLibrary.simpleMessage("MY LIST"),
+    "lbl_original_for_you": MessageLookupByLibrary.simpleMessage(
+      "Original For You",
+    ),
+    "lbl_popularity": MessageLookupByLibrary.simpleMessage("POPULARITY"),
+    "lbl_rank": MessageLookupByLibrary.simpleMessage("RANK"),
+    "lbl_see_more": MessageLookupByLibrary.simpleMessage("See more"),
+    "lbl_share": MessageLookupByLibrary.simpleMessage("SHARE"),
+    "lbl_show_synopsis_plot": MessageLookupByLibrary.simpleMessage(
+      "SHOW SYNOPSIS/PLOT :",
+    ),
+    "lbl_source": MessageLookupByLibrary.simpleMessage("Source"),
+    "lbl_start_watching": MessageLookupByLibrary.simpleMessage(
+      "START WATCHING",
+    ),
+    "lbl_start_watching_e1": MessageLookupByLibrary.simpleMessage(
+      "START WATCHING E1",
+    ),
+    "lbl_status": MessageLookupByLibrary.simpleMessage("Status"),
+    "lbl_type": MessageLookupByLibrary.simpleMessage("Type"),
+    "lbl_youtube_link": MessageLookupByLibrary.simpleMessage("Youtube Link :"),
+  };
 }

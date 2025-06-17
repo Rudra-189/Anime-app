@@ -1,13 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:project2/core/constants/app_constants.dart';
-import 'package:project2/core/utils/status.dart';
+import 'package:project2/core/utils/exports.dart';
 import 'package:project2/model/animeDataModel.dart';
-import 'package:project2/viewmodel/hoem_bloc/home_bloc.dart';
-import 'package:project2/viewmodel/hoem_bloc/home_event.dart';
-import 'package:project2/viewmodel/hoem_bloc/home_state.dart';
+import 'package:project2/widget/common_widget/app_shimmer.dart';
+
+import '../../core/generated/l10n.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,58 +10,68 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: BlocConsumer<HomeBloc, HomeState>(
-        listener: (context, state) {
-        },
+      body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           if(state.homeStatus == status.init){
-            context.read<HomeBloc>().add(loadHomePageData());
+            context.read<HomeBloc>().add(LoadHomePageDataEvent());
           }
-          if(state.homeStatus == status.loading){
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }else if(state.homeStatus == status.success){
+          if (state.homeStatus == status.loading) {
+            return AppShimmer.buildShimmerLoading(context); // Replace CircularProgressIndicator
+          } else if (state.homeStatus == status.success) {
             final data = state.data;
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
                   automaticallyImplyLeading: false,
                   backgroundColor: Colors.black,
-                  expandedHeight:600.h,
+                  elevation: 10,
+                  expandedHeight: 600.h,
                   actions: [
-                    CircleAvatar(
-                      backgroundColor: Colors.white.withOpacity(0.2),
-                      child: IconButton(onPressed: (){
-                        Navigator.of(context).pushNamed(AppConstants.searchRoute);
-                      }, icon: Icon(Icons.search,color: Colors.orange,size: 22.sp,)),
-                    ),
-                    SizedBox(width: 5.w,)
+                    IconButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(AppRouter.searchRoute);
+                        },
+                        icon: Icon(
+                          Icons.search,
+                          color:
+                              MyAppThemeHelper.darkTheme.secondaryHeaderColor,
+                          size: 22.sp,
+                        )),
+                    SizedBox(
+                      width: 5.w,
+                    )
                   ],
+                  pinned: true,
+                  title: CustomImageView(imagePath: "assets/app_icon.png",height: 75),
                   flexibleSpace: FlexibleSpaceBar(
-                    background: _buildCarouselSlider(context,data),
+                    background: _buildCarouselSlider(context, data),
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 10.h,),
-                      _buildTextAndSeeMore("Original Popular"),
-                      SizedBox(height: 10.h,),
-                      _buildListView(state.mangaData),
-                      SizedBox(height: 20.h,),
-                      _buildTextAndSeeMore("Manga You"),
-                      _buildGridView(state.originalData)
-                    ],
-                  )
-                )
+                    child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    _buildTextAndSeeMore(context,Lang.of(context).lbl_manga_for_you),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    _buildListView(state.mangaData),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    _buildTextAndSeeMore(context,Lang.of(context).lbl_original_for_you),
+                    CommonGridView(gridData: state.originalData)
+                  ],
+                ))
               ],
             );
-          }else if(state.homeStatus == status.failure){
-            return Center(child: Text(state.errorMessage),);
           }else{
-            return const SizedBox();
+            return Center(
+              child: Text(state.errorMessage),
+            );
           }
         },
       ),
@@ -74,110 +79,104 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-
-Widget _buildCarouselSlider(BuildContext context,List<Anime> data){
+Widget _buildCarouselSlider(BuildContext context, List<Anime> data) {
   return CarouselSlider(
-      items: data.map((e)=> InkWell(
-        onTap: (){
-          Navigator.of(context).pushNamed(AppConstants.detailRoute,arguments: e.malId);
-        },
-        child: Stack(
-          children: [
-            Container(
-              height: 600.h,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(e.images.jpg.largeImageUrl.toString()),
-                  fit: BoxFit.cover,
-                ),
+      items: data
+          .map((e) => Stack(
+            children: [
+              SizedBox(
+                height: 600.h,
+                child: CustomImageView(imagePath: e.images.jpg.largeImageUrl.toString(),fit: BoxFit.cover,),
               ),
-            ),
-            Container(
-              height: 600.h,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  end: Alignment.bottomCenter,
-                  begin: Alignment.topCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.25),
-                    Colors.black.withOpacity(0.75),
-                    Colors.black
+              Container(
+                height: 600.h,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    end: Alignment.bottomCenter,
+                    begin: Alignment.topCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.transparent,
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.25),
+                      Colors.black.withOpacity(0.75),
+                      Colors.black
+                    ],
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 10.w, vertical: 10.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(e.title,
+                        style: MyAppThemeHelper
+                            .darkTheme.textTheme.titleLarge),
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    Row(
+                      children: [
+                        TypeButton(
+                            type: e.type.toString(),
+                            color: Colors.orange),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        TypeButton(
+                            type: e.source.toString(),
+
+                            color: Colors.orange),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Text(
+                          Lang.of(context).lbl_dub_sub,
+                          style: MyAppThemeHelper
+                              .darkTheme.textTheme.titleMedium,
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Text(e.status.toString(),
+                            style: MyAppThemeHelper
+                                .darkTheme.textTheme.titleMedium),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    Text(
+                      e.synopsis.toString(),
+                      style: MyAppThemeHelper
+                          .darkTheme.textTheme.titleSmall,
+                      maxLines: 3,
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        PlayButton(title: Lang.of(context).lbl_start_watching,onTap: ()
+                          {  Navigator.of(context)
+                              .pushNamed(AppRouter.detailRoute, arguments: e.malId);},),
+                        SizedBox(
+                          width: 20.w,
+                        ),
+                        BookmarkButton(),
+                      ],
+                    )
                   ],
                 ),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 10.h),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(e.title,style: TextStyle(color: Colors.white,fontSize: 16.sp,fontWeight: FontWeight.w500,letterSpacing: 1)),
-                  SizedBox(height: 5.h,),
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2)
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 1.h),
-                        alignment: Alignment.center,
-                        child: Text(e.type.toString(),style: TextStyle(fontSize: 10.sp,color: Colors.orange),),
-                      ),
-                      SizedBox(width: 5.w,),
-                      Text(" Dub | Sub ",style: TextStyle(color: Colors.white.withOpacity(0.75),fontSize: 13.sp),),
-                      SizedBox(width: 5.w,),
-                      Text(e.source.toString()+"   "+e.status.toString(),style: TextStyle(color: Colors.white.withOpacity(0.75),fontSize: 13.sp),),
-                    ],
-                  ),
-                  SizedBox(height: 5.h,),
-                  Text(e.synopsis.toString(),style: TextStyle(color: Colors.white.withOpacity(0.5),fontSize: 12.sp),maxLines: 3,),
-                  SizedBox(height: 20.h,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                          height: 50.h,
-                          width: 290.w,
-                          decoration: BoxDecoration(
-                              color: Colors.orange,
-                              borderRadius: BorderRadius.circular(5.r)
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.play_arrow_outlined,color: Colors.black,size: 30.sp,),
-                              Text("START WATCHING",style: TextStyle(color: Colors.black,fontSize: 16.sp,fontWeight: FontWeight.bold),),
-                            ],
-                          )
-                      ),
-                      SizedBox(width: 20.w,),
-                      Container(
-                        height: 50.h,
-                        width: 50.w,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(color: Colors.orange,width: 3.w),
-                            bottom: BorderSide(color: Colors.orange,width: 3.w),
-                            left: BorderSide(color: Colors.orange,width: 3.w),
-                            right: BorderSide(color: Colors.orange,width: 3.w),
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Icon(Icons.bookmark_outline,color: Colors.orange,),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      )).toList(),
+            ],
+          ))
+          .toList(),
       options: CarouselOptions(
         height: 600.h,
-        aspectRatio: 16/9,
+        aspectRatio: 16 / 9,
         viewportFraction: 1,
         initialPage: 0,
         enableInfiniteScroll: true,
@@ -189,148 +188,80 @@ Widget _buildCarouselSlider(BuildContext context,List<Anime> data){
         enlargeCenterPage: true,
         enlargeFactor: 0.3,
         scrollDirection: Axis.horizontal,
-      )
-  );
+      ));
 }
 
-Widget _buildListView(List<Anime> listData){
+Widget _buildListView(List<Anime> listData) {
   return SizedBox(
     height: 250.h,
-    child: ListView.builder(itemBuilder: (context,index){
-      final data = listData[index];
-      return InkWell(
-        onTap: (){
-          Navigator.of(context).pushNamed(AppConstants.detailRoute,arguments: data.malId);
-        },
-        child: Container(
-          height: 250.h,
-          width: 150.w,
-          margin: EdgeInsets.only(left: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start ,
-            children: [
-              Container(
-                height: 200.h,
-                width: 145.w,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    image: DecorationImage(
-                        image: NetworkImage(data.images.jpg.largeImageUrl.toString()),
-                        fit: BoxFit.cover
-                    )
+    child: ListView.builder(
+      itemBuilder: (context, index) {
+        final data = listData[index];
+        return InkWell(
+          onTap: () {
+            Navigator.of(context).pushNamed(AppRouter.detailRoute, arguments: data.malId);
+          },
+          child: Container(
+            height: 250.h,
+            width: 150.w,
+            margin: EdgeInsets.only(left: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 200.h,
+                  width: 145.w,
+                  child: CustomImageView(imagePath: data.images.jpg.largeImageUrl.toString(),fit: BoxFit.cover,radius: BorderRadius.circular(10),),
                 ),
-              ),
-              Text(data.title,style: TextStyle(color: Colors.white,fontSize: 12.sp,overflow: TextOverflow.ellipsis),),
-              Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2)
+                Text(
+                  data.title,
+                  style: MyAppThemeHelper.darkTheme.textTheme.bodyMedium,
+                  maxLines: 1,
+                ),
+                Row(
+                  children: [
+                    TypeButton(
+                        type: data.type.toString(),
+
+                        color: Colors.orange),
+                    SizedBox(
+                      width: 5.w,
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 1.h),
-                    alignment: Alignment.center,
-                    child: Text(data.type.toString(),style: TextStyle(color: Colors.orange,fontSize: 10.sp),),
-                  ),
-                  SizedBox(width: 5.w,),
-                  Text("Dub | Sub",style: TextStyle(color: Colors.white.withOpacity(0.75),fontSize: 12.sp),)
-                ],
-              )
-            ],
+                    TypeButton(
+                        type: data.source.toString(),
+
+                        color: Colors.orange),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Expanded(
+                        child: Text(
+                      Lang.of(context).lbl_dub_sub,
+                      style: MyAppThemeHelper.darkTheme.textTheme.bodySmall!
+                          .copyWith(overflow: TextOverflow.ellipsis),
+                    ))
+                  ],
+                )
+              ],
+            ),
           ),
-        ),
-      );
-    },
+        );
+      },
       itemCount: listData.length,
       scrollDirection: Axis.horizontal,
     ),
   );
 }
 
-Widget _buildGridView(List<Anime> gridData){
-  return GridView.builder(
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2, // Number of columns
-      crossAxisSpacing: 0,
-      mainAxisSpacing:0,
-      childAspectRatio: 0.45 / 0.67, //
-      // Width / Height
-    ),
-    itemCount: gridData.length,
-    shrinkWrap: true,
-    physics: NeverScrollableScrollPhysics(),// Total items
-    itemBuilder: (context, index) {
-      final data = gridData[index];
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          InkWell(
-            onTap:(){
-              Navigator.of(context).pushNamed(AppConstants.detailRoute,arguments: data.malId);
-            },
-            child: SizedBox(
-              height: 285.h,
-              width: 175.w,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 225.h,
-                    width: 175.w,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                            image: NetworkImage(data.images.jpg.largeImageUrl.toString()),
-                            fit: BoxFit.cover
-                        ),
-                      border: Border(
-                            top: BorderSide(color: Colors.orange,width: 2.5.w),
-                            bottom: BorderSide(color: Colors.orange,width: 2.5.w),
-                            left: BorderSide(color: Colors.orange,width: 2.5.w),
-                            right: BorderSide(color: Colors.orange,width: 2.5.w)
-                        ),
-                      borderRadius: BorderRadius.circular(10.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.orange.withOpacity(0.25),
-                          offset: Offset(5, 5),
-                          blurRadius: 5
-                        )
-                      ]
-                    ),
-                  ),
-                  Text(data.title,style: TextStyle(color: Colors.white,fontSize: 14,overflow: TextOverflow.ellipsis),maxLines: 2,),
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2)
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 1.h),
-                        alignment: Alignment.center,
-                        child: Text(data.type.toString(),style: TextStyle(color: Colors.orange,fontSize: 10.sp),),
-                      ),
-                      SizedBox(width: 5.w,),
-                      Text("Dub | Sub",style: TextStyle(color: Colors.white.withOpacity(0.75),fontSize: 12.sp),)
-                    ],
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      );
-    },
-
-  );
-}
-
-Widget _buildTextAndSeeMore(String title){
+Widget _buildTextAndSeeMore(BuildContext context,String title) {
   return Padding(
-    padding:EdgeInsets.symmetric(horizontal: 10.w),
+    padding: EdgeInsets.symmetric(horizontal: 10.w),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title,style: TextStyle(color: Colors.white,fontSize: 15.sp,fontWeight: FontWeight.w500),),
-        Text("See more",style: TextStyle(color: Colors.orange,fontSize: 14.sp),),
+        Text(title, style: MyAppThemeHelper.darkTheme.textTheme.titleLarge),
+        Text(Lang.of(context).lbl_see_more,
+            style: MyAppThemeHelper.darkTheme.textTheme.displayMedium),
       ],
     ),
   );

@@ -5,13 +5,23 @@ abstract class SearchEvent extends Equatable{
   List<Object> get props => [];
 }
 
-class LoadSearchData extends SearchEvent{}
+class LoadSearchDataEvent extends SearchEvent{}
 
-class OnSearchTextChange extends SearchEvent{
+class OnSearchTextChangeEvent extends SearchEvent{
   final String query;
 
-  OnSearchTextChange(this.query);
+  OnSearchTextChangeEvent(this.query);
 
   @override
   List<Object> get props => [query];
+}
+
+class OnFilterChangeEvent extends SearchEvent{
+  final bool type;
+  final String source;
+
+  OnFilterChangeEvent({required this.type,required this.source});
+
+  @override
+  List<Object> get props => [type,source];
 }

@@ -54,13 +54,147 @@ class Lang {
   static Lang? maybeOf(BuildContext context) {
     return Localizations.of<Lang>(context, Lang);
   }
+
+  /// `ANIME`
+  String get lbl_app_name {
+    return Intl.message('ANIME', name: 'lbl_app_name', desc: '', args: []);
+  }
+
+  /// `START WATCHING`
+  String get lbl_start_watching {
+    return Intl.message(
+      'START WATCHING',
+      name: 'lbl_start_watching',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `START WATCHING E1`
+  String get lbl_start_watching_e1 {
+    return Intl.message(
+      'START WATCHING E1',
+      name: 'lbl_start_watching_e1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dub | Sub`
+  String get lbl_dub_sub {
+    return Intl.message('Dub | Sub', name: 'lbl_dub_sub', desc: '', args: []);
+  }
+
+  /// `Original For You`
+  String get lbl_original_for_you {
+    return Intl.message(
+      'Original For You',
+      name: 'lbl_original_for_you',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manga For You`
+  String get lbl_manga_for_you {
+    return Intl.message(
+      'Manga For You',
+      name: 'lbl_manga_for_you',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Youtube Link :`
+  String get lbl_youtube_link {
+    return Intl.message(
+      'Youtube Link :',
+      name: 'lbl_youtube_link',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SHOW SYNOPSIS/PLOT :`
+  String get lbl_show_synopsis_plot {
+    return Intl.message(
+      'SHOW SYNOPSIS/PLOT :',
+      name: 'lbl_show_synopsis_plot',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get lbl_type {
+    return Intl.message('Type', name: 'lbl_type', desc: '', args: []);
+  }
+
+  /// `Source`
+  String get lbl_source {
+    return Intl.message('Source', name: 'lbl_source', desc: '', args: []);
+  }
+
+  /// `Status`
+  String get lbl_status {
+    return Intl.message('Status', name: 'lbl_status', desc: '', args: []);
+  }
+
+  /// `MY LIST`
+  String get lbl_my_list {
+    return Intl.message('MY LIST', name: 'lbl_my_list', desc: '', args: []);
+  }
+
+  /// `SHARE`
+  String get lbl_share {
+    return Intl.message('SHARE', name: 'lbl_share', desc: '', args: []);
+  }
+
+  /// `RANK`
+  String get lbl_rank {
+    return Intl.message('RANK', name: 'lbl_rank', desc: '', args: []);
+  }
+
+  /// `POPULARITY`
+  String get lbl_popularity {
+    return Intl.message(
+      'POPULARITY',
+      name: 'lbl_popularity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `MEMBERS`
+  String get lbl_members {
+    return Intl.message('MEMBERS', name: 'lbl_members', desc: '', args: []);
+  }
+
+  /// `FAVORITES`
+  String get lbl_favorites {
+    return Intl.message('FAVORITES', name: 'lbl_favorites', desc: '', args: []);
+  }
+
+  /// `See more`
+  String get lbl_see_more {
+    return Intl.message('See more', name: 'lbl_see_more', desc: '', args: []);
+  }
+
+  /// `Duration`
+  String get lbl_duration {
+    return Intl.message('Duration', name: 'lbl_duration', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Lang> {
   const AppLocalizationDelegate();
 
   List<Locale> get supportedLocales {
-    return const <Locale>[Locale.fromSubtags(languageCode: 'en')];
+    return const <Locale>[
+      Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'gu'),
+      Locale.fromSubtags(languageCode: 'hi'),
+    ];
   }
 
   @override
